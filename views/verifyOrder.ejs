@@ -1,0 +1,18 @@
+<%- include('layout/header')%> <%- include('layout/navbar')%>
+<div class="container">
+    <form action="/cart/order" method="POST" class="container">
+        <input type="hidden" name="cartId" value="<%=cartId%>">
+        <input type="text" name="adress" placeholder="Adress" class="form-control">
+        <input type="submit" value="Order" class="btn btn-primary ">
+    </form>
+    <br>
+    
+    <% if(error){%>
+        <p class="alert alert-danger" style="width: fit-content;">
+            <%= error.msg %>
+        </p>
+        <%}%>
+</div>
+
+
+<%- include('layout/footer')%>

@@ -1,0 +1,126 @@
+<%- include('layout/header')%> <%- include('layout/navbar')%>
+<br />
+<div class="d-flex flex-row justify-content-center">
+  <form class="mx-3" action="/admin/manage-order" method="PUT">
+    <input type="hidden" name="status" value="All" />
+    <button type="submit" class="btn btn-primary">All</button>
+  </form>
+  <form class="mx-3" action="/admin/manage-order" method="PUT">
+    <input type="hidden" name="status" value="Pending" />
+    <button type="submit" class="btn btn-primary">Pending</button>
+  </form>
+  <form class="mx-3" action="/admin/manage-order" method="PUT">
+    <input type="hidden" name="status" value="Sent" />
+    <button type="submit" class="btn btn-primary">Sent</button>
+  </form>
+  <form class="mx-3" action="/admin/manage-order" method="PUT">
+    <input type="hidden" name="status" value="Completed" />
+    <button type="submit" class="btn btn-primary">Completed</button>
+  </form>
+</div>
+<br />
+
+<form
+  class="d-flex justify-content-center"
+  style="width: fit-content; margin: auto; position: relative"
+  action="/admin/manage-order"
+  method="PUT"
+>
+  <% if(error&&error.param==="userEmail"){%>
+
+  <p
+    class="alert alert-danger mx-5"
+    style="
+      width: fit-content;
+      margin: auto;
+      padding: 6px;
+      position: absolute;
+      right: 100%;
+    "
+  >
+    <%=error.msg%>
+  </p>
+
+  <%}%>
+
+  <input
+    class="mx-2.5"
+    type="email"
+    name="userEmail"
+    placeholder="User Email"
+  />
+
+  <button type="submit" class="btn btn-primary mx-5">Search</button>
+</form>
+
+<br />
+<table class="table table-bordred">
+  <thead>
+    <tr>
+      <th>Email</th>
+      <th>Product</th>
+      <th>Amount</th>
+      <th>Cost</th>
+      <th>Adress</th>
+      <th>status</th>
+      <th>Time</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% for(let order of orders){ %> <% var Status =
+    ["Pending","Sent","Completed"].filter(e=>e!==order.status) %>
+
+    <tr>
+      <td><%= order.userEmail %></td>
+      <td><%= order.name %></td>
+      <td><%= order.amount %></td>
+      <td><%= order.price %></td>
+      <td><%= order.adress %></td>
+      <form method="POST">
+        <td>
+          <select name="newStatus" id="">
+            <option value="<%= order.status %>" Selected>
+              <%= order.status %>
+            </option>
+            <% for(let statu of Status){%>
+            <option value="<%= statu %>"><%= statu %></option>
+            <%}%>
+          </select>
+        </td>
+        <td><%= order.timestamp %></td>
+        <td>
+          <input type="hidden" name="orderId" value="<%=order._id%>" />
+          <button
+            type="submit"
+            class="btn btn-danger"
+            formaction="/order/changeStatus"
+          >
+            Save
+          </button>
+          <button
+            type="submit"
+            class="btn btn-danger"
+            formaction="/order/deleteOne"
+          >
+            Cancel
+          </button>
+        </td>
+      </form>
+    </tr>
+    <%}%>
+  </tbody>
+</table>
+
+<% if(orders.length>0){%>
+<form action="/order/deleteAll" method="POST">
+  <button
+    type="submit"
+    class="btn btn-danger float-right"
+    formmethod="POST"
+    formaction="/order/deleteAll"
+  >
+    Cancel All
+  </button>
+</form>
+<%}%> <%- include('layout/footer')%>

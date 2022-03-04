@@ -1,0 +1,50 @@
+<%- include('layout/header')%> <%- include('layout/navbar')%>
+
+<div class="container">
+    <%if(items.length===0){%>
+    <p class="alert alert-danger"> There is no items</p>    
+    <%} else {%>
+        <table class="table table-bordered">
+            <% if(error){%>
+                <p class="alert alert-danger">
+                    <%=error.msg%>
+                </p>
+                <%}%>
+            <thead>
+                <tr>
+                <td>no</td>
+                <td>Product name</td>
+                <td>Price</td>
+                <td>Amount</td>
+                <td>Total</td>
+                <td></td>
+                </tr>
+            </thead>
+            <tbody>
+                
+                <% for(let i in items) {%>
+                    <tr>
+                <td> <%= (+i)+1 %> </td>
+                <td> <%= items[i].name %> </td>
+                <td><%= (+items[i].price) %></td>
+                <form action="" method="POST">
+
+                    <td><input type="text" name="amount" class="form-control" value="<%= items[i].amount %>"></td>
+                    <td><%= (+items[i].price) * (+items[i].amount) %> $</td>
+                    <td>
+                        <input type="hidden" name="cartId"  value="<%= items[i]._id %>">
+                        <input type="submit"  class="btn btn-success" value="Change amount"  formaction="/cart/save">
+                        <input type="submit"  class="btn btn-success" value="Order" formmethod="PUT" formaction="/cart/verifyOrder">
+                        <input type="submit"  class="btn btn-danger" value="Delete" formaction="/cart/delete">
+                    </td>
+                </form>
+            </tr>
+                    <%}%>
+            </tbody>
+        </table>
+        <form action="/cart/deleteAll" method="POST">
+        <input type="submit" value="Delete All" class="btn btn-danger float-right">
+    </form> 
+        <%}%>
+</div>
+<%- include('layout/footer')%>

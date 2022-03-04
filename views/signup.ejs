@@ -1,0 +1,50 @@
+<%- include('layout/header') %> <%- include('layout/navbar') %>
+<div class="container text-center">
+    <h3> Create Account</h3>
+    <form action="/signup" method="POST">
+    <input type="text" name="username" placeholder="Username" class="form-control">
+        <% let usernameError=validationErrors.find(err=>err.param ==='username') %>
+        <% if(usernameError) {%>
+            <p class="alert alert-danger">
+                <%= usernameError.msg %>
+            </p>
+        <%} %>
+    <input type="email" name="email" placeholder="E-mail" class="form-control">
+    <% let emailError=validationErrors.find(err=>err.param ==='email')%>
+   
+        <%if(emailError) {%>
+            <p class="alert alert-danger">
+                <%= emailError.msg%>
+            </p>
+        <%} %>
+        <% if(authError){ %>
+       
+            <p class="alert alert-danger">
+                <%= authError %>
+            </p>
+      
+      <%  }%>
+        
+    <input type="password" name="password" placeholder="password" class="form-control">
+    <% let passwordError=validationErrors.find(err=>err.param ==='password') %>
+        <% if(passwordError) {%>
+            <p class="alert alert-danger">
+                <%= passwordError.msg %>
+            </p>
+        <%} %>
+    <input type="password" name="confirmPassword" placeholder="Confirm Password" class="form-control">
+    <% let confirmPasswordError=validationErrors.find(err=>err.param ==='confirmPassword') %>
+        <% if(confirmPasswordError) {%>
+            <p class="alert alert-danger">
+                <%= confirmPasswordError.msg %>
+            </p>
+        <%} %>
+    <input type="submit" value="Create Account" class="btn btn-primary">
+    </form>
+    
+    <br>
+    <div>Already have account ? <a href="/login">Connect</a></div>
+</div>
+
+
+<%- include('layout/footer') %>
