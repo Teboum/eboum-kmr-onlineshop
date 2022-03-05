@@ -120,26 +120,22 @@ const orderSchema = mongoose.Schema({
   adress: String,
   status: String,
   productId: String,
-  timestamp: Number,
+  timestamp: String,
   userEmail: String,
 });
 
 const OrderItem = mongoose.model("order", orderSchema);
 
 exports.addNewOrder = (cartId, adress,userEmail) => {
-  console.log(adress, userEmail);
- 
   return new Promise((resolve, reject) => {
     mongoose
       .connect(DB_URL)
       .then(() =>
-
-        CartItem.findOne({ _id: cartId }, { timestamp: false }, (err, obj) => {
+      CartItem.findOne({ _id: cartId }, { timestamp: false }, (err, obj) => {
           if (!obj) {
             mongoose.disconnect();
             return reject(err);
           } else {
-            console.log(adress);
             let order = new OrderItem({
               userEmail: userEmail,
               name: obj.name,
@@ -149,7 +145,7 @@ exports.addNewOrder = (cartId, adress,userEmail) => {
               adress: adress,
               status: "Pending",
               productId: obj.productId,
-              timestamp: Date.now(),
+              timestamp: new Date().toISOString(),
             });
             return order.save();
           }
@@ -162,7 +158,7 @@ exports.addNewOrder = (cartId, adress,userEmail) => {
       })
       .catch((err) => {
         mongoose.disconnect();
-        reject("bas");
+        reject(err);
       });
   });
 };
